@@ -20,6 +20,43 @@ def lock(root):
   except BlockingIOError as e: raise BackupError("backup store is busy") from e
   try: yield
   finally: fcntl.flock(f.fileno(),fcntl.LOCK_UN)
+def _paths_overlap(source, destination):
+ """Return True when either path contains the other."""
+ return source == destination or source in destination.parents or destination in source.parents
+
+
+def _validate_backup_paths(sources, root):
+ """Validate sources and reject any source/destination directory overlap.
+
+ This runs before the backup lock creates the destination directory. That
+ ordering is important: a rejected backup must not modify the source tree.
+ """
+ destination = Path(root).expanduser()
+ if destination.is_symlink():
+  raise BackupError(f"backup destination must not be a symlink: {destination}")
+ destination = destination.resolve()
+ normalized = []
+ aliases = set()
+ for alias, source in sources:
+  if not isinstance(alias, str) or not alias or "/" in alias or alias in (".", ".."):
+   raise BackupError("invalid source alias")
+  if alias in aliases:
+   raise BackupError(f"duplicate source alias: {alias}")
+  aliases.add(alias)
+  source = Path(source).expanduser()
+  if source.is_symlink() or not source.is_dir():
+   raise BackupError(f"source missing or unsafe: {source}")
+  source = source.resolve()
+  if _paths_overlap(source, destination):
+   raise BackupError(
+    f"source and backup destination overlap; refusing backup: {source} <-> {destination}"
+   )
+  normalized.append((alias, source))
+ if not normalized:
+  raise BackupError("at least one source directory is required")
+ return normalized, destination
+
+
 def scan(sources):
  files={};dirs=[]
  for alias,root in sources:
@@ -36,7 +73,7 @@ def scan(sources):
     files[key]={"sha256":h,"size":b.st_size,"mtime_ns":b.st_mtime_ns}
  return {"files":files,"directories":sorted(set(dirs))}
 def backup(sources,root,job_id):
- root=Path(root)
+ sources,root = _validate_backup_paths(sources, root)
  with lock(root):
   vd=root/"Versions"; obj=root/"Objects";vd.mkdir(exist_ok=True);obj.mkdir(exist_ok=True)
   versions=sorted((p for p in vd.glob("V[0-9]*") if p.is_dir()),key=lambda p:int(p.name[1:]))

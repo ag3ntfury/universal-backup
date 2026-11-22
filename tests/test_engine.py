@@ -12,3 +12,31 @@ class EngineTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as d:
    r=Path(d);s=r/"src";s.mkdir();(s/"x").write_text("x");store=r/"store";backup([("src",s)],store,"j");out=r/"out";out.mkdir()
    with self.assertRaises(BackupError):restore(store,"V000001",out)
+
+ def test_rejects_destination_inside_source_before_creating_it(self):
+  with tempfile.TemporaryDirectory() as d:
+   source=Path(d)/"source";source.mkdir();(source/"document.txt").write_text("safe")
+   destination=source/"Backups"
+   with self.assertRaisesRegex(BackupError,"overlap"):
+    backup([("data",source)],destination,"j")
+   self.assertFalse(destination.exists())
+
+ def test_rejects_source_inside_destination(self):
+  with tempfile.TemporaryDirectory() as d:
+   destination=Path(d)/"store";source=destination/"input";source.mkdir(parents=True)
+   (source/"document.txt").write_text("safe")
+   with self.assertRaisesRegex(BackupError,"overlap"):
+    backup([("data",source)],destination,"j")
+
+ def test_rejects_source_equal_to_destination(self):
+  with tempfile.TemporaryDirectory() as d:
+   same=Path(d)/"same";same.mkdir()
+   with self.assertRaisesRegex(BackupError,"overlap"):
+    backup([("data",same)],same,"j")
+
+ def test_rejects_duplicate_source_aliases(self):
+  with tempfile.TemporaryDirectory() as d:
+   source=Path(d)/"source";source.mkdir();destination=Path(d)/"store"
+   with self.assertRaisesRegex(BackupError,"duplicate source alias"):
+    backup([("data",source),("data",source)],destination,"j")
+   self.assertFalse(destination.exists())
