@@ -447,6 +447,11 @@ class JobEditor:
         except Exception as exc:
             self.error_var.set(str(exc))
 
+    def cancel(self):
+        """Close the editor without saving any changes."""
+        self.result = None
+        self.window.destroy()
+
 
 class Dashboard:
     def __init__(self, root: tk.Tk):

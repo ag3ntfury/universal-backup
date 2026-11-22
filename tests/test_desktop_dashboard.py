@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from types import SimpleNamespace
 
-from universal_backup.desktop import _job_status, _systemctl
+from universal_backup.desktop import JobEditor, _job_status, _systemctl
 
 
 class DesktopDashboardHelperTests(unittest.TestCase):
@@ -24,6 +24,24 @@ class DesktopDashboardHelperTests(unittest.TestCase):
         result = _systemctl("is-active")
         self.assertEqual(result.returncode, 0)
         self.assertEqual(run.call_args.args[0], ["systemctl", "--user", "is-active", "universal-backup.service"])
+
+
+    def test_editor_cancel_discards_changes(self):
+        class DummyWindow:
+            def __init__(self):
+                self.destroyed = False
+
+            def destroy(self):
+                self.destroyed = True
+
+        editor = JobEditor.__new__(JobEditor)
+        editor.result = ("unsaved-job", {"name": "Unsaved"})
+        editor.window = DummyWindow()
+
+        editor.cancel()
+
+        self.assertIsNone(editor.result)
+        self.assertTrue(editor.window.destroyed)
 
 
 if __name__ == "__main__":
