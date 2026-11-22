@@ -1,0 +1,27 @@
+id: android-phone-backup
+name: Android Phone Backup
+enabled: true
+source:
+  type: android
+  device_id: REPLACE_WITH_ADB_SERIAL
+  entries:
+    - name: camera
+      path: /sdcard/DCIM
+    - name: documents
+      path: /sdcard/Documents
+    - name: pictures
+      path: /sdcard/Pictures
+destination:
+  device:
+    type: storage
+    identifier_type: filesystem_uuid
+    uuid: REPLACE_WITH_REAL_UUID
+  path: Android Backups/Motorola
+schedule:
+  interval: 3d
+  mode: prompt
+  skip_reminder: 15m
+backup:
+  integrity: sha256
+  verify_after_backup: true
+  automatic_pruning: false

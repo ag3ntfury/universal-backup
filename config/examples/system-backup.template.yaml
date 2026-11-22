@@ -1,0 +1,29 @@
+# TEMPLATE ONLY: disabled until paths, exclusions and destination are reviewed.
+id: system-backup
+name: System Backup
+enabled: false
+source:
+  type: local
+  entries:
+    - name: etc
+      path: /etc
+    - name: home-fury
+      path: /home/your-user
+    - name: srv-services
+      path: /srv/example-services
+    - name: srv-projects
+      path: /srv/example-projects
+destination:
+  device:
+    type: storage
+    identifier_type: filesystem_uuid
+    uuid: REPLACE_WITH_REAL_UUID
+  path: System Backups
+schedule:
+  interval: 1d
+  mode: auto
+  skip_reminder: 15m
+backup:
+  integrity: sha256
+  verify_after_backup: true
+  automatic_pruning: false

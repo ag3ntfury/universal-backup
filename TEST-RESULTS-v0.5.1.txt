@@ -1,0 +1,19 @@
+Universal Backup v0.5.1 — validation results
+
+Automated regression suite: 45 tests passed, 0 failed.
+
+Validation includes:
+- Existing v0.4 scheduler, persistent-state recovery, worker/daemon locks, device inventory, configuration, resource policy and backup-engine regression tests.
+- New scheduler profile-reload tests: new profiles are discovered and malformed edits retain the last known-good job set.
+- Desktop status helpers and systemd command construction.
+- Desktop prompt behaviour: accept, decline, skip and safe-deny when Zenity is unavailable.
+- Python compileall completed successfully.
+- Installer and uninstaller shell syntax checks passed.
+- Python wheel build completed successfully.
+- Package metadata reports version 0.5.1 and Python >=3.10.
+
+Limitations:
+- GUI visual interaction was not manually tested in a live GNOME session.
+- systemd user-service installation and notification delivery still require target-desktop testing.
+- No real user backup source or physical backup destination was accessed.
+- This is an Alpha release; do not rely on it as the only copy of important data.

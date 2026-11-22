@@ -1,0 +1,36 @@
+id: documents-backup
+name: Documents Backup
+enabled: true
+source:
+  type: local
+  entries:
+    - name: paperless-originals
+      path: /srv/example-data/documents
+    - name: personal-documents
+      path: /home/your-user/Documents
+destination:
+  device:
+    type: storage
+    identifier_type: filesystem_uuid
+    uuid: REPLACE_WITH_REAL_UUID
+  path: Documents Backups
+schedule:
+  interval: 7d
+  mode: prompt
+  skip_reminder: 15m
+backup:
+  integrity: sha256
+  verify_after_backup: true
+  automatic_pruning: false
+
+
+# Backup workers run with low CPU and disk-I/O priority.
+# Memory limits are enforced when launched in a user systemd scope.
+resources:
+  memory_high: 1G
+  memory_max: 2G
+  cpu_weight: 20
+  io_weight: 20
+  nice: 10
+  ionice_class: 3
+  max_parallel_jobs: 1

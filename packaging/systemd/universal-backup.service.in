@@ -1,0 +1,17 @@
+[Unit]
+Description=Universal Backup scheduler
+After=graphical-session.target
+
+[Service]
+Type=simple
+Environment=UNIVERSAL_BACKUP_DESKTOP=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=@VENV@/bin/universal-backup daemon --config-dir @CONFIG_DIR@ --state-file @STATE_FILE@ --poll-interval 5
+Restart=on-failure
+RestartSec=5
+Nice=10
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

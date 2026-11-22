@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Universal Backup
+Comment=Manage scheduled and verified backups
+Exec=@VENV@/bin/universal-backup-ui
+Icon=drive-harddisk
+Terminal=false
+Categories=Utility;Archiving;System;
+StartupNotify=true

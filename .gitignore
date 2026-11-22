@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+state/
+logs/
+*.egg-info/
+build/
+dist/
+.coverage
+.pytest_cache/
+
+# Local development backups
+*.failed-editor-backup
+*.v0.5.1-original
+*.bak
+*.tmp
+*.swp

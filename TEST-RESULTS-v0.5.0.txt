@@ -1,0 +1,20 @@
+Universal Backup v0.5.0 — validation results
+
+Automated regression suite: 38 tests passed, 0 failed.
+Runtime: 0.035 seconds in the build environment.
+
+Coverage includes:
+- Existing v0.4 scheduler, state recovery, worker/daemon locks, device inventory,
+  configuration, resource policy and backup engine tests.
+- Desktop prompt behaviour for accept, decline, skip, and missing Zenity safe-deny.
+- Python compileall completed successfully.
+- CLI help and version import completed successfully.
+- Desktop UI module and packaging metadata added.
+
+Limitations of this validation:
+- No real backup job was executed against user data or a physical backup drive.
+- GUI visual interaction was not manually tested in a GNOME session in this build environment.
+- systemd user service installation/startup and desktop notification delivery require
+  validation on the target Ubuntu desktop.
+- The package installer dependency resolution was not tested against the public
+  package index in this environment; outbound network access was unavailable.

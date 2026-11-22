@@ -1,0 +1,34 @@
+test_intervals (test_config.ConfigTests.test_intervals) ... ok
+test_traversal (test_config.ConfigTests.test_traversal) ... ok
+test_valid (test_config.ConfigTests.test_valid) ... ok
+test_debounce_confirms_connect (test_device_monitor.DeviceMonitorTests.test_debounce_confirms_connect) ... ok
+test_debounce_confirms_disconnect (test_device_monitor.DeviceMonitorTests.test_debounce_confirms_disconnect) ... ok
+test_debounce_confirms_mountpoint_change (test_device_monitor.DeviceMonitorTests.test_debounce_confirms_mountpoint_change) ... ok
+test_debounce_ignores_single_scan_disconnect (test_device_monitor.DeviceMonitorTests.test_debounce_ignores_single_scan_disconnect) ... ok
+test_detects_connection (test_device_monitor.DeviceMonitorTests.test_detects_connection) ... ok
+test_detects_disconnection (test_device_monitor.DeviceMonitorTests.test_detects_disconnection) ... ok
+test_device_key_uses_stable_identity (test_device_monitor.DeviceMonitorTests.test_device_key_uses_stable_identity) ... ok
+test_uuid_match (test_devices.Tests.test_uuid_match) ... ok
+test_wrong_uuid (test_devices.Tests.test_wrong_uuid) ... ok
+test_backup_versions_verify_restore (test_engine.EngineTests.test_backup_versions_verify_restore) ... ok
+test_restore_no_overwrite (test_engine.EngineTests.test_restore_no_overwrite) ... ok
+test_unchanged_is_idempotent (test_engine.EngineTests.test_unchanged_is_idempotent) ... ok
+test_local_missing_source_keeps_job_pending (test_manager.ManagerTests.test_local_missing_source_keeps_job_pending) ... ok
+test_ready_local_job_matches_uuid_and_existing_source (test_manager.ManagerTests.test_ready_local_job_matches_uuid_and_existing_source) ... ok
+test_custom_policy (test_resource_limits.ResourcePolicyTests.test_custom_policy) ... ok
+test_defaults (test_resource_limits.ResourcePolicyTests.test_defaults) ... ok
+test_rejects_bad_memory (test_resource_limits.ResourcePolicyTests.test_rejects_bad_memory) ... ok
+test_rejects_parallel_jobs (test_resource_limits.ResourcePolicyTests.test_rejects_parallel_jobs) ... ok
+test_systemd_command_contains_limits (test_resource_limits.ResourcePolicyTests.test_systemd_command_contains_limits) ... ok
+test_denied_until_next_interval_and_persists (test_scheduler.DeclineTests.test_denied_until_next_interval_and_persists) ... ok
+test_failure_pending (test_scheduler.Tests.test_failure_pending) ... ok
+test_first_due (test_scheduler.Tests.test_first_due) ... ok
+test_last_success_clock (test_scheduler.Tests.test_last_success_clock) ... ok
+test_skip (test_scheduler.Tests.test_skip) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.019s
+
+OK
+
+compileall exit: 0
