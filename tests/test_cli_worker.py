@@ -1,6 +1,8 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from universal_backup.cli import _execute
@@ -37,8 +39,19 @@ backup: {{integrity: sha256, verify_after_backup: true}}
             state.begin("worker-test")
             fake = Device("storage", "filesystem_uuid", "FAKE-USB", "Fake USB",
                           str(mount), {"system": False, "removable": True})
-            with patch("universal_backup.cli.DeviceInventory") as inventory:
+            findmnt_result = SimpleNamespace(
+                returncode=0,
+                stdout=json.dumps({"filesystems": [{"target": str(mount), "uuid": "FAKE-USB"}]}),
+                stderr="",
+            )
+            # _execute() performs its initial readiness scan through cli.DeviceInventory.
+            # JobManager independently refreshes storage immediately before writing,
+            # so its inventory and findmnt identity checks must be mocked separately.
+            with patch("universal_backup.cli.DeviceInventory") as inventory, \
+                 patch("universal_backup.manager.DeviceInventory") as manager_inventory, \
+                 patch("universal_backup.manager.subprocess.run", return_value=findmnt_result):
                 inventory.return_value.all.return_value = [fake]
+                manager_inventory.return_value.storage.return_value = [fake]
                 result = _execute(config, state_path)
             self.assertEqual(result, 0)
             record = SchedulerState(state_path).record("worker-test")
